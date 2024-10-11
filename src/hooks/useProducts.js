@@ -98,7 +98,7 @@ export default function useProducts() {
       if (product.name.length > 1) {
         const data = await getProductsByName(product.name);
         console.log(data);
-        data.success ? setNameList(data.data) : console.log(data.error.cause);
+        data.success ? setNameList(data.data) : setNameList([]);
       }
     } catch (err) {
       console.error(err.message);

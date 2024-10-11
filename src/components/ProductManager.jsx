@@ -85,9 +85,9 @@ function ProductManager({
           />
         </div>
         {nameList.length > 0 ? (
-          <div className="col-span-full max-h-[20vh]">
+          <div className="col-span-full max-h-[20vh] overflow-scroll">
             <table className="bg-slate-400 border-2 border-slate-600 w-full">
-              <thead>
+              <thead className="sticky top-0 bg-slate-500">
                 <tr>
                   <th>NOMBRE</th>
                   <th>STOCK</th>
