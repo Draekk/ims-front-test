@@ -38,7 +38,7 @@ function PTable({
   }
 
   return (
-    <div className="bg-gray-300 mx-auto w-fit rounded-lg overflow-scroll h-[50vh] shadow-lg text-xl">
+    <div className="bg-gray-300 mx-auto w-fit rounded-md overflow-scroll h-[70vh] shadow-lg text-xl">
       {deleteConfirmationModal ? (
         <CustomModal
           title={"aviso"}
@@ -51,13 +51,14 @@ function PTable({
       ) : (
         <></>
       )}
-      <table className="md:w-[70vw]">
+      <table className="md:w-[90vw] w-full">
         <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
           <tr>
             <th>Código</th>
             <th>Nombre</th>
             <th
               id="stock"
+              title="Ordenar"
               onClick={(e) => sortProducts(e, order)}
               className="cursor-pointer hover:bg-gray-700"
             >
@@ -65,6 +66,7 @@ function PTable({
             </th>
             <th
               id="costPrice"
+              title="Ordenar"
               onClick={(e) => sortProducts(e, order)}
               className="cursor-pointer hover:bg-gray-700"
             >
@@ -73,6 +75,7 @@ function PTable({
 
             <th
               id="salePrice"
+              title="Ordenar"
               onClick={(e) => sortProducts(e, order)}
               className="cursor-pointer hover:bg-gray-700"
             >
@@ -90,13 +93,16 @@ function PTable({
                 onClick={(e) => selectProduct(e, p)}
               >
                 <td>{p.barcode}</td>
-                <td className="capitalize">{p.name}</td>
+                <td title={p.name} className="capitalize text-nowrap">
+                  {p.name}
+                </td>
                 <td className="text-center">{p.stock}</td>
                 <td className="text-center">{formatCurrency(p.costPrice)}</td>
                 <td className="text-center">{formatCurrency(p.salePrice)}</td>
                 <td className="px-4">
                   <button
                     id="action"
+                    title={`Eliminar ${p.name}`}
                     className="text-center bg-red-700 hover:bg-red-500 font-black text-white w-full rounded-md"
                     onClick={() => showDeleteModal(p.id)}
                   >
