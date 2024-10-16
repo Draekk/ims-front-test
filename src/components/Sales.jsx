@@ -1,7 +1,7 @@
 import React from "react";
 import formatCurrency from "../helpers/formatCurrency";
 
-function Sales({ product, productsToSale, prepareSaleList, productFactory }) {
+function Sales({ product, sale, addToSale, productFactory }) {
   return (
     <div className="md:max-w-[90%] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
       <form
@@ -23,7 +23,7 @@ function Sales({ product, productsToSale, prepareSaleList, productFactory }) {
             autoComplete="off"
             value={product.barcode}
             onChange={(e) => productFactory(e)}
-            onBlur={prepareSaleList}
+            onBlur={addToSale}
           />
         </div>
         <div className="relative w-full md:w-[63%]">
@@ -52,9 +52,9 @@ function Sales({ product, productsToSale, prepareSaleList, productFactory }) {
             </tr>
           </thead>
           <tbody>
-            {productsToSale ? (
+            {sale.length > 0 ? (
               <>
-                {productsToSale.map((s) => (
+                {sale.map((s) => (
                   <tr key={s.id}>
                     <td>{s.name}</td>
                     <td>{s.quantity}</td>

@@ -14,8 +14,10 @@ function useFetchProducts() {
 
   const getProductByBarcode = async (barcode) => {
     try {
+      console.log(barcode);
       const res = await fetch(`${API}/find/barcode/${barcode}`);
-      const data = res.json();
+      const data = await res.json();
+      console.log(data);
       return data;
     } catch (err) {
       console.error(err.message);
