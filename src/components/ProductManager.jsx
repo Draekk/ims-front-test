@@ -60,6 +60,9 @@ function ProductManager({
             value={product.barcode}
             onChange={(e) => productFactory(e)}
             onBlur={fetchProductByBarcode}
+            onKeyDown={(e) =>
+              e.key === "Enter" ? fetchProductByBarcode() : null
+            }
           />
         </div>
         <div className="relative col-span-3">

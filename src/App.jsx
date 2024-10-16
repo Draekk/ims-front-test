@@ -23,7 +23,8 @@ function App() {
     fetchProductsByName,
     switchModal,
   } = useProducts();
-  const { sale, addToSale } = useSales();
+  const { sale, item, itemFactory, addToSale, clearSale, saleTotal } =
+    useSales();
 
   const { switches, toggleSwitches } = useHeaderButtons();
 
@@ -73,10 +74,12 @@ function App() {
 
       {switches.s2 ? (
         <Sales
-          product={product}
+          item={item}
+          itemFactory={itemFactory}
           sale={sale}
           addToSale={addToSale}
-          productFactory={productFactory}
+          clearSale={clearSale}
+          saleTotal={saleTotal}
         ></Sales>
       ) : (
         <></>
