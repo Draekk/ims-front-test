@@ -23,8 +23,17 @@ function App() {
     fetchProductsByName,
     switchModal,
   } = useProducts();
-  const { sale, item, itemFactory, addToSale, clearSale, saleTotal } =
-    useSales();
+  const {
+    sale,
+    item,
+    itemFactory,
+    addToSale,
+    clearSale,
+    saleTotal,
+    searchList,
+    searchProduct,
+    resetSearchList,
+  } = useSales();
 
   const { switches, toggleSwitches } = useHeaderButtons();
 
@@ -62,7 +71,7 @@ function App() {
             ></PTable>
             <button
               onClick={switchModal}
-              className="mx-auto bg-blue-500 hover:bg-blue-400 p-4 rounded-full m-4 font-black text-white uppercase"
+              className="mx-auto bg-blue-500 hover:bg-blue-400 p-4 rounded-md m-4 font-black text-white uppercase"
             >
               Gestionar Producto
             </button>
@@ -80,6 +89,9 @@ function App() {
           addToSale={addToSale}
           clearSale={clearSale}
           saleTotal={saleTotal}
+          searchList={searchList}
+          searchProduct={searchProduct}
+          resetSearchList={resetSearchList}
         ></Sales>
       ) : (
         <></>

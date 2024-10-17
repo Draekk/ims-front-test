@@ -35,7 +35,7 @@ function ProductManager({
   }
 
   return (
-    <div className="z-20 flex flex-col justify-center items-center bg-[rgba(0,0,0,0.85)] rounded-[50px] px-[20px] py-[50px] md:max-w-[70%] w-full">
+    <div className="z-20 flex flex-col justify-center items-center bg-[rgba(0,0,0,0.85)] rounded-lg px-[20px] py-[50px] md:max-w-[70%] w-full">
       <h1 className="text-center text-white font-black text-4xl mb-10 uppercase">
         Gestionar Producto
       </h1>
@@ -52,7 +52,7 @@ function ProductManager({
             Código:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="text"
             id="barcode"
             name="barcode"
@@ -73,7 +73,7 @@ function ProductManager({
             Nombre:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="text"
             id="name"
             name="name"
@@ -123,7 +123,7 @@ function ProductManager({
             Stock:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="number"
             id="stock"
             name="stock"
@@ -140,7 +140,7 @@ function ProductManager({
             Precio Costo:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="number"
             id="costPrice"
             name="costPrice"
@@ -157,7 +157,7 @@ function ProductManager({
             Precio Venta:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="number"
             id="salePrice"
             name="salePrice"
@@ -167,7 +167,7 @@ function ProductManager({
           />
         </div>
         <button
-          className="col-end-4 row-end-6 cursor-pointer bg-blue-500 disabled:bg-slate-500 hover:bg-blue-400 py-2 mx-5 rounded-3xl font-black text-white"
+          className="col-end-4 row-end-6 cursor-pointer bg-blue-500 disabled:bg-slate-500 hover:bg-blue-400 py-2 mx-5 rounded-md font-black text-white"
           onClick={saveWithMsg}
           disabled={activeAlert}
           type="button"
@@ -177,14 +177,14 @@ function ProductManager({
         <button
           onClick={resetProduct}
           type="button"
-          className="col-end-3 row-end-6 bg-slate-500 hover:bg-slate-400 py-2 mx-5 rounded-3xl font-black text-white"
+          className="col-end-3 row-end-6 bg-slate-500 hover:bg-slate-400 py-2 mx-5 rounded-md font-black text-white"
         >
           LIMPIAR
         </button>
         <button
           onClick={closeModal}
           type="button"
-          className="col-end-2 row-end-6 bg-slate-500 hover:bg-slate-400 py-2 mx-5 rounded-3xl font-black text-white"
+          className="col-end-2 row-end-6 bg-slate-500 hover:bg-slate-400 py-2 mx-5 rounded-md font-black text-white"
         >
           CANCELAR
         </button>

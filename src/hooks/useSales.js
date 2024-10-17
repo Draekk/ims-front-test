@@ -14,7 +14,8 @@ function useSales() {
   };
   const [sale, setSale] = useState(initialSale);
   const [item, setItem] = useState(emptyItem);
-  const { getProductByBarcode } = useFetchProducts();
+  const [searchList, setSearchList] = useState([]);
+  const { getProductByBarcode, getProductsByName } = useFetchProducts();
 
   useEffect(() => {
     localStorage.setItem("sale", JSON.stringify(sale));
@@ -28,17 +29,24 @@ function useSales() {
     });
   };
 
-  async function addToSale() {
+  async function addToSale(selectedItem = null) {
     try {
-      const tempItem = { ...item };
-      const data = await getProductByBarcode(tempItem.barcode);
-      if (data.success) {
-        const { id, barcode, name, salePrice } = data.data;
-        tempItem.id = id;
-        tempItem.barcode = barcode;
-        tempItem.name = name;
-        tempItem.price = salePrice;
-      } else throw new Error("Error...");
+      console.log(selectedItem);
+      let tempItem;
+      if (selectedItem) {
+        tempItem = { ...selectedItem };
+        console.log(tempItem);
+      } else {
+        tempItem = { ...item };
+        const data = await getProductByBarcode(tempItem.barcode);
+        if (data.success) {
+          const { id, barcode, name, salePrice } = data.data;
+          tempItem.id = id;
+          tempItem.barcode = barcode;
+          tempItem.name = name;
+          tempItem.price = salePrice;
+        } else throw new Error("Error...");
+      }
       const saleExist = sale.findIndex((s) => s.id === tempItem.id);
       if (saleExist > -1) {
         const updatedSale = [...sale];
@@ -73,6 +81,37 @@ function useSales() {
     [sale]
   );
 
+  async function searchProduct(e) {
+    try {
+      const { value } = e.target;
+      if (value.trim() !== "" && value.trim().length > 1) {
+        const data = await getProductsByName(value.trim());
+
+        if (data.success) {
+          const mappedList = data.data.map((p) => {
+            return {
+              id: p.id,
+              barcode: p.barcode,
+              name: p.name,
+              price: p.salePrice,
+            };
+          });
+
+          setSearchList(mappedList);
+        } else resetSearchList();
+      } else {
+        setSearchList([]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function resetSearchList() {
+    setSearchList([]);
+    setItem(emptyItem);
+  }
+
   return {
     sale,
     item,
@@ -80,6 +119,9 @@ function useSales() {
     addToSale,
     clearSale,
     saleTotal,
+    searchList,
+    searchProduct,
+    resetSearchList,
   };
 }
 

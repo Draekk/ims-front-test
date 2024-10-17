@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import formatCurrency from "../helpers/formatCurrency";
 
-function Sales({ item, sale, addToSale, itemFactory, clearSale, saleTotal }) {
+function Sales({
+  item,
+  sale,
+  addToSale,
+  itemFactory,
+  clearSale,
+  saleTotal,
+  searchList,
+  searchProduct,
+  resetSearchList,
+}) {
+  const [cantModal, setCantModal] = useState(false);
+
   return (
     <div className="md:max-w-[90%] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="md:flex md:flex-row flex-col md:justify-between w-full"
+        className="md:flex md:flex-row flex-col md:justify-between w-full text-2xl"
       >
         <div className="relative md:w-[35%] md:mb-0 mb-2">
           <label
-            className="absolute text-black underline left-1"
+            className="absolute text-black underline left-1 text-lg"
             htmlFor="barcode"
           >
             Código:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="text"
             id="barcode"
             name="barcode"
@@ -33,18 +45,45 @@ function Sales({ item, sale, addToSale, itemFactory, clearSale, saleTotal }) {
         </div>
         <div className="relative w-full md:w-[63%]">
           <label
-            className="absolute text-black underline left-1"
+            className="absolute text-black underline left-1 text-lg"
             htmlFor="name"
           >
             Nombre:
           </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none focus:outline-cyan-800"
+            className="pl-1 pt-6 rounded-md w-full focus:outline-none focus:outline-cyan-800"
             type="text"
             id="name"
             name="name"
             autoComplete="off"
+            onChange={(e) => searchProduct(e)}
+            onBlur={(e) =>
+              setTimeout(() => {
+                resetSearchList();
+                e.target.value = "";
+              }, 300)
+            }
           />
+          {searchList.length > 0 ? (
+            <div className="w-full bg-white absolute z-20 shadow-md shadow-gray-500">
+              <table className="w-full">
+                <tbody>
+                  {searchList.map((p) => (
+                    <tr
+                      key={p.id}
+                      className="hover:bg-blue-400 cursor-pointer"
+                      onClick={() => addToSale(p)}
+                    >
+                      <td>{p.name}</td>
+                      <td className="w-32">{formatCurrency(p.price)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </form>
       <div className="w-full h-full m-2 bg-gray-300 rounded-md overflow-scroll">
@@ -64,7 +103,28 @@ function Sales({ item, sale, addToSale, itemFactory, clearSale, saleTotal }) {
                   <tr key={s.id}>
                     <td className="capitalize">{s.barcode}</td>
                     <td className="capitalize">{s.name}</td>
-                    <td className="text-center">{s.quantity}</td>
+                    <td
+                      className="text-center"
+                      onDoubleClick={() => setCantModal(true)}
+                    >
+                      {s.quantity}
+                      {cantModal ? (
+                        <div className="absolute">
+                          <label
+                            htmlFor="cant"
+                            className="underline relative left-10 bottom-5"
+                          >
+                            Cant:
+                          </label>
+                          <input
+                            className="bg-white size-16 shadow-custom-white rounded-lg outline-none p-1 text-center text-xl"
+                            type="number"
+                          />
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
                   </tr>
                 ))}
