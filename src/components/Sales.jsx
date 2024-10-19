@@ -107,23 +107,12 @@ function Sales({
                       className="text-center"
                       onDoubleClick={() => setCantModal(true)}
                     >
-                      {s.quantity}
-                      {cantModal ? (
-                        <div className="absolute">
-                          <label
-                            htmlFor="cant"
-                            className="underline relative left-10 bottom-5"
-                          >
-                            Cant:
-                          </label>
-                          <input
-                            className="bg-white size-16 shadow-custom-white rounded-lg outline-none p-1 text-center text-xl"
-                            type="number"
-                          />
-                        </div>
-                      ) : (
-                        <></>
-                      )}
+                      <input
+                        className="w-full text-center bg-transparent"
+                        type="number"
+                        value={s.quantity}
+                        readOnly={!cantModal}
+                      />
                     </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
                   </tr>
