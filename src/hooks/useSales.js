@@ -62,6 +62,7 @@ function useSales() {
           name: tempItem.name,
           quantity,
           total: tempItem.price * quantity,
+          edit: false,
         };
         setSale([...sale, newSale]);
       }
