@@ -4,7 +4,6 @@ import ProductManager from "./components/ProductManager";
 import Sales from "./components/Sales";
 import useHeaderButtons from "./hooks/useHeaderButtons";
 import useProducts from "./hooks/useProducts";
-import useSales from "./hooks/useSales";
 
 function App() {
   const {
@@ -23,20 +22,6 @@ function App() {
     fetchProductsByName,
     switchModal,
   } = useProducts();
-  const {
-    sale,
-    item,
-    itemFactory,
-    addToSale,
-    clearSale,
-    saleTotal,
-    searchList,
-    searchProduct,
-    resetSearchList,
-    setEditItem,
-    editQuantity,
-    itemSaleFactory,
-  } = useSales();
 
   const { switches, toggleSwitches } = useHeaderButtons();
 
@@ -84,24 +69,7 @@ function App() {
         <></>
       )}
 
-      {switches.s2 ? (
-        <Sales
-          item={item}
-          itemFactory={itemFactory}
-          sale={sale}
-          addToSale={addToSale}
-          clearSale={clearSale}
-          saleTotal={saleTotal}
-          searchList={searchList}
-          searchProduct={searchProduct}
-          resetSearchList={resetSearchList}
-          setEditItem={setEditItem}
-          editQuantity={editQuantity}
-          itemSaleFactory={itemSaleFactory}
-        ></Sales>
-      ) : (
-        <></>
-      )}
+      {switches.s2 ? <Sales></Sales> : <></>}
     </div>
   );
 }

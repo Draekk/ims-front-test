@@ -103,7 +103,7 @@ function PTable({
                   <button
                     id="action"
                     title={`Eliminar ${p.name}`}
-                    className="text-center bg-red-700 hover:bg-red-500 font-black text-white w-full rounded-md"
+                    className="text-center bg-red-700 hover:bg-red-600 hover:shadow-custom-red font-black text-white w-full rounded-md"
                     onClick={() => showDeleteModal(p.id)}
                   >
                     x

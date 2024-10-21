@@ -1,24 +1,40 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import formatCurrency from "../helpers/formatCurrency";
+import useSales from "../hooks/useSales";
 
-function Sales({
-  item,
-  sale,
-  addToSale,
-  itemFactory,
-  clearSale,
-  saleTotal,
-  searchList,
-  searchProduct,
-  resetSearchList,
-  setEditItem,
-  editQuantity,
-  itemSaleFactory,
-}) {
-  const [cantModal, setCantModal] = useState(false);
+function Sales() {
+  const [selection, setSelection] = useState({ state: false, id: 0 });
+  const {
+    sale,
+    item,
+    itemFactory,
+    addToSale,
+    clearSale,
+    saleTotal,
+    searchList,
+    searchProduct,
+    resetSearchList,
+    setEditItem,
+    editQuantity,
+    itemSaleFactory,
+    selectItem,
+    deleteItem,
+  } = useSales();
+
+  function selectRow(item) {
+    if (!selection.state && item.id !== selection.id) {
+      selectItem(item);
+      setSelection({ state: true, id: item.id });
+    } else if (selection.state && item.id !== selection.id) {
+      selectItem(item);
+      setSelection({ ...selection, id: item.id });
+    } else {
+      setSelection({ state: false, id: 0 });
+    }
+  }
 
   return (
-    <div className="md:max-w-[90%] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
+    <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
       <form
         onSubmit={(e) => e.preventDefault()}
         className="md:flex md:flex-row flex-col md:justify-between w-full text-2xl"
@@ -36,12 +52,11 @@ function Sales({
             id="barcode"
             name="barcode"
             autoComplete="off"
-            value={item.barcode}
             onChange={(e) => itemFactory(e)}
-            onBlur={() => (item.barcode.trim() !== "" ? addToSale() : null)}
+            onBlur={(e) => (item.barcode.trim() !== "" ? addToSale(e) : null)}
             onKeyDown={(e) =>
               item.barcode.trim() !== "" && e.key === "Enter"
-                ? addToSale()
+                ? addToSale(e)
                 : null
             }
           />
@@ -75,7 +90,7 @@ function Sales({
                     <tr
                       key={p.id}
                       className="hover:bg-blue-400 cursor-pointer"
-                      onClick={() => addToSale(p)}
+                      onClick={(e) => addToSale(e, p)}
                     >
                       <td>{p.name}</td>
                       <td className="w-32">{formatCurrency(p.price)}</td>
@@ -93,7 +108,7 @@ function Sales({
         <table className="w-full text-xl">
           <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
             <tr>
-              <th className="w-72">CÓDIGO</th>
+              <th className="w-56">CÓDIGO</th>
               <th>NOMBRE</th>
               <th className="w-44">CANTIDAD</th>
               <th className="w-44">PRECIO</th>
@@ -103,7 +118,15 @@ function Sales({
             {sale.length > 0 ? (
               <>
                 {sale.map((s) => (
-                  <tr key={s.id}>
+                  <tr
+                    key={s.id}
+                    className={`hover:bg-blue-400 cursor-pointer ${
+                      selection.state && selection.id === s.id
+                        ? "bg-blue-600"
+                        : "bg-transparent"
+                    }`}
+                    onClick={() => selectRow(s)}
+                  >
                     <td className="capitalize">{s.barcode}</td>
                     <td className="capitalize">{s.name}</td>
                     <td
@@ -148,7 +171,12 @@ function Sales({
           >
             LIMPIAR
           </button>
-          <button>button</button>
+          <button
+            className="bg-teal-300 hover:bg-teal-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            onClick={deleteItem}
+          >
+            ELIMINAR ITEM
+          </button>
           <button className="row-span-2 bg-green-300 hover:bg-green-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner">
             button
           </button>

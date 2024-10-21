@@ -31,13 +31,11 @@ function useSales() {
     });
   };
 
-  async function addToSale(selectedItem = null) {
+  async function addToSale(e, selectedItem = null) {
     try {
-      console.log(selectedItem);
       let tempItem;
       if (selectedItem) {
         tempItem = { ...selectedItem };
-        console.log(tempItem);
       } else {
         tempItem = { ...item };
         const data = await getProductByBarcode(tempItem.barcode);
@@ -69,6 +67,7 @@ function useSales() {
         setSale([...sale, newSale]);
       }
       setItem(emptyItem);
+      e.target.value = "";
     } catch (err) {
       console.error(err);
     }
@@ -134,7 +133,11 @@ function useSales() {
   }
 
   async function setEditItem(barcode) {
-    await getItemInfo(barcode);
+    try {
+      await getItemInfo(barcode);
+    } catch (err) {
+      console.error(err);
+    }
     const updatedSale = [...sale];
     const itemExist = updatedSale.findIndex((p) => p.barcode === barcode);
     updatedSale[itemExist].edit = !updatedSale[itemExist].edit;
@@ -144,11 +147,10 @@ function useSales() {
   function editQuantity() {
     const updatedSale = [...sale];
     const itemExist = updatedSale.findIndex((p) => p.id === item.id);
-    // updatedSale[itemExist].quantity > 0 ? updatedSale[itemExist].quantity : 1;
     updatedSale[itemExist].total = updatedSale[itemExist].quantity * item.price;
     updatedSale[itemExist].edit = false;
     setSale(updatedSale);
-    setItem(emptyItem);
+    // setItem(emptyItem);
   }
 
   function itemSaleFactory(e, barcode) {
@@ -156,11 +158,19 @@ function useSales() {
     const updatedSale = [...sale];
     const itemExist = updatedSale.findIndex((i) => i.barcode === barcode);
     updatedSale[itemExist].quantity = value === "" || value > 0 ? value : 1;
-    // updatedSale[itemExist].total = updatedSale[itemExist].quantity * item.price;
-    // updatedSale[itemExist].edit = false;
     setSale(updatedSale);
-    // saleItem.quantity = value;
-    // saleItem.total = value * item.price;
+  }
+
+  function selectItem(saleItem) {
+    setItem(saleItem);
+  }
+
+  function deleteItem() {
+    if (item !== emptyItem) {
+      const updatedSale = sale.filter((p) => p.barcode !== item.barcode);
+      setSale(updatedSale);
+      setItem(emptyItem);
+    }
   }
 
   return {
@@ -176,6 +186,8 @@ function useSales() {
     setEditItem,
     editQuantity,
     itemSaleFactory,
+    selectItem,
+    deleteItem,
   };
 }
 
