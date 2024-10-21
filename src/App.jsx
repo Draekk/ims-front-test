@@ -33,6 +33,9 @@ function App() {
     searchList,
     searchProduct,
     resetSearchList,
+    setEditItem,
+    editQuantity,
+    itemSaleFactory,
   } = useSales();
 
   const { switches, toggleSwitches } = useHeaderButtons();
@@ -92,6 +95,9 @@ function App() {
           searchList={searchList}
           searchProduct={searchProduct}
           resetSearchList={resetSearchList}
+          setEditItem={setEditItem}
+          editQuantity={editQuantity}
+          itemSaleFactory={itemSaleFactory}
         ></Sales>
       ) : (
         <></>

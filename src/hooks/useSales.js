@@ -10,6 +10,7 @@ function useSales() {
     id: 0,
     barcode: "",
     name: "",
+    quantity: 1,
     price: 0,
   };
   const [sale, setSale] = useState(initialSale);
@@ -23,9 +24,10 @@ function useSales() {
 
   const itemFactory = (e) => {
     const { id, value } = e.target;
+    const isNumberField = ["quantity"].includes(id);
     setItem({
       ...item,
-      [id]: value.toLowerCase(),
+      [id]: isNumberField ? +value : value.toLowerCase(),
     });
   };
 
@@ -113,6 +115,54 @@ function useSales() {
     setItem(emptyItem);
   }
 
+  async function getItemInfo(barcode) {
+    try {
+      const data = await getProductByBarcode(barcode);
+      if (data.success) {
+        const { id, barcode, name, salePrice } = data.data;
+        setItem({
+          ...item,
+          id,
+          barcode,
+          name,
+          price: salePrice,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function setEditItem(barcode) {
+    await getItemInfo(barcode);
+    const updatedSale = [...sale];
+    const itemExist = updatedSale.findIndex((p) => p.barcode === barcode);
+    updatedSale[itemExist].edit = !updatedSale[itemExist].edit;
+    setSale(updatedSale);
+  }
+
+  function editQuantity() {
+    const updatedSale = [...sale];
+    const itemExist = updatedSale.findIndex((p) => p.id === item.id);
+    // updatedSale[itemExist].quantity > 0 ? updatedSale[itemExist].quantity : 1;
+    updatedSale[itemExist].total = updatedSale[itemExist].quantity * item.price;
+    updatedSale[itemExist].edit = false;
+    setSale(updatedSale);
+    setItem(emptyItem);
+  }
+
+  function itemSaleFactory(e, barcode) {
+    const { value } = e.target;
+    const updatedSale = [...sale];
+    const itemExist = updatedSale.findIndex((i) => i.barcode === barcode);
+    updatedSale[itemExist].quantity = value === "" || value > 0 ? value : 1;
+    // updatedSale[itemExist].total = updatedSale[itemExist].quantity * item.price;
+    // updatedSale[itemExist].edit = false;
+    setSale(updatedSale);
+    // saleItem.quantity = value;
+    // saleItem.total = value * item.price;
+  }
+
   return {
     sale,
     item,
@@ -123,6 +173,9 @@ function useSales() {
     searchList,
     searchProduct,
     resetSearchList,
+    setEditItem,
+    editQuantity,
+    itemSaleFactory,
   };
 }
 

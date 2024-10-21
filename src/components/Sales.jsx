@@ -11,6 +11,9 @@ function Sales({
   searchList,
   searchProduct,
   resetSearchList,
+  setEditItem,
+  editQuantity,
+  itemSaleFactory,
 }) {
   const [cantModal, setCantModal] = useState(false);
 
@@ -105,13 +108,26 @@ function Sales({
                     <td className="capitalize">{s.name}</td>
                     <td
                       className="text-center"
-                      onDoubleClick={() => setCantModal(true)}
+                      onDoubleClick={() =>
+                        !s.edit ? setEditItem(s.barcode) : null
+                      }
+                      // onKeyDown={(e) =>
+                      //   !s.edit && e.key === "Enter"
+                      //     ? setEditItem(s.barcode)
+                      //     : null
+                      // }
                     >
                       <input
-                        className="w-full text-center bg-transparent"
+                        className="w-full text-center bg-transparent disabled:outline-none"
+                        id="quantity"
                         type="number"
                         value={s.quantity}
-                        readOnly={!cantModal}
+                        readOnly={!s.edit}
+                        onChange={(e) => itemSaleFactory(e, s.barcode)}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && s.edit ? editQuantity() : null
+                        }
+                        onBlur={() => (s.edit ? editQuantity() : null)}
                       />
                     </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
