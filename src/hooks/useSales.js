@@ -16,6 +16,7 @@ function useSales() {
   const [sale, setSale] = useState(initialSale);
   const [item, setItem] = useState(emptyItem);
   const [searchList, setSearchList] = useState([]);
+  const [selection, setSelection] = useState({ state: false, id: 0 });
   const { getProductByBarcode, getProductsByName } = useFetchProducts();
 
   useEffect(() => {
@@ -23,11 +24,11 @@ function useSales() {
   }, [sale]);
 
   const itemFactory = (e) => {
-    const { id, value } = e.target;
-    const isNumberField = ["quantity"].includes(id);
+    const { name, value } = e.target;
+    const isNumberField = ["quantity"].includes(name);
     setItem({
       ...item,
-      [id]: isNumberField ? +value : value.toLowerCase(),
+      [name]: isNumberField ? +value : value.toLowerCase(),
     });
   };
 
@@ -147,7 +148,7 @@ function useSales() {
   function editQuantity() {
     const updatedSale = [...sale];
     const itemExist = updatedSale.findIndex((p) => p.id === item.id);
-    updatedSale[itemExist].total = updatedSale[itemExist].quantity * item.price;
+    updatedSale[itemExist].total = item.quantity * item.price;
     updatedSale[itemExist].edit = false;
     setSale(updatedSale);
     // setItem(emptyItem);
@@ -170,6 +171,20 @@ function useSales() {
       const updatedSale = sale.filter((p) => p.barcode !== item.barcode);
       setSale(updatedSale);
       setItem(emptyItem);
+      setSelection({ state: false, id: 0 });
+    }
+  }
+
+  function selectRow(selectedItem) {
+    if (!selection.state && selectedItem.id !== selection.id) {
+      selectItem(selectedItem);
+      setSelection({ state: true, id: selectedItem.id });
+    } else if (selection.state && selectedItem.id !== selection.id) {
+      selectItem(selectedItem);
+      setSelection({ ...selection, id: selectedItem.id });
+    } else {
+      setSelection({ state: false, id: 0 });
+      setItem(emptyItem);
     }
   }
 
@@ -186,8 +201,9 @@ function useSales() {
     setEditItem,
     editQuantity,
     itemSaleFactory,
-    selectItem,
     deleteItem,
+    selectRow,
+    selection,
   };
 }
 

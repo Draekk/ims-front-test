@@ -1,9 +1,7 @@
-import { useState } from "react";
 import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
 
 function Sales() {
-  const [selection, setSelection] = useState({ state: false, id: 0 });
   const {
     sale,
     item,
@@ -17,21 +15,10 @@ function Sales() {
     setEditItem,
     editQuantity,
     itemSaleFactory,
-    selectItem,
     deleteItem,
+    selectRow,
+    selection,
   } = useSales();
-
-  function selectRow(item) {
-    if (!selection.state && item.id !== selection.id) {
-      selectItem(item);
-      setSelection({ state: true, id: item.id });
-    } else if (selection.state && item.id !== selection.id) {
-      selectItem(item);
-      setSelection({ ...selection, id: item.id });
-    } else {
-      setSelection({ state: false, id: 0 });
-    }
-  }
 
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
@@ -131,9 +118,7 @@ function Sales() {
                     <td className="capitalize">{s.name}</td>
                     <td
                       className="text-center"
-                      onDoubleClick={() =>
-                        !s.edit ? setEditItem(s.barcode) : null
-                      }
+                      onClick={() => (!s.edit ? setEditItem(s.barcode) : null)}
                       // onKeyDown={(e) =>
                       //   !s.edit && e.key === "Enter"
                       //     ? setEditItem(s.barcode)
@@ -142,7 +127,7 @@ function Sales() {
                     >
                       <input
                         className="w-full text-center bg-transparent disabled:outline-none"
-                        id="quantity"
+                        name="quantity"
                         type="number"
                         value={s.quantity}
                         readOnly={!s.edit}
@@ -166,13 +151,13 @@ function Sales() {
       <div className="grid grid-cols-3 w-full">
         <div className="col-span-2 grid grid-rows-2 grid-cols-3">
           <button
-            className="bg-teal-300 hover:bg-teal-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-blue-300 hover:bg-blue-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={clearSale}
           >
             LIMPIAR
           </button>
           <button
-            className="bg-teal-300 hover:bg-teal-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-red-300 hover:bg-red-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={deleteItem}
           >
             ELIMINAR ITEM
