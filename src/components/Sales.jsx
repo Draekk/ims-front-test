@@ -2,6 +2,8 @@ import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
 
 function Sales() {
+  const { getItemByBarcode, saleProduct } = useSales();
+
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
       <form
@@ -21,6 +23,7 @@ function Sales() {
             id="barcode"
             name="barcode"
             autoComplete="off"
+            onBlur={(e) => getItemByBarcode(e)}
           />
         </div>
         <div className="relative w-full md:w-[63%]">
