@@ -2,24 +2,6 @@ import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
 
 function Sales() {
-  const {
-    sale,
-    item,
-    itemFactory,
-    addToSale,
-    clearSale,
-    saleTotal,
-    searchList,
-    searchProduct,
-    resetSearchList,
-    setEditItem,
-    editQuantity,
-    itemSaleFactory,
-    deleteItem,
-    selectRow,
-    selection,
-  } = useSales();
-
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
       <form
@@ -39,13 +21,6 @@ function Sales() {
             id="barcode"
             name="barcode"
             autoComplete="off"
-            onChange={(e) => itemFactory(e)}
-            onBlur={(e) => (item.barcode.trim() !== "" ? addToSale(e) : null)}
-            onKeyDown={(e) =>
-              item.barcode.trim() !== "" && e.key === "Enter"
-                ? addToSale(e)
-                : null
-            }
           />
         </div>
         <div className="relative w-full md:w-[63%]">
@@ -61,28 +36,24 @@ function Sales() {
             id="name"
             name="name"
             autoComplete="off"
-            onChange={(e) => searchProduct(e)}
-            onBlur={(e) =>
-              setTimeout(() => {
-                resetSearchList();
-                e.target.value = "";
-              }, 300)
-            }
           />
-          {searchList.length > 0 ? (
+          {false ? (
             <div className="w-full bg-white absolute z-20 shadow-md shadow-gray-500">
               <table className="w-full">
                 <tbody>
-                  {searchList.map((p) => (
-                    <tr
-                      key={p.id}
-                      className="hover:bg-blue-400 cursor-pointer"
-                      onClick={(e) => addToSale(e, p)}
-                    >
-                      <td>{p.name}</td>
-                      <td className="w-32">{formatCurrency(p.price)}</td>
-                    </tr>
-                  ))}
+                  {[].map(
+                    (
+                      p //todo:
+                    ) => (
+                      <tr
+                        key={p.id}
+                        className="hover:bg-blue-400 cursor-pointer"
+                      >
+                        <td>{p.name}</td>
+                        <td className="w-32">{formatCurrency(p.price)}</td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -102,23 +73,23 @@ function Sales() {
             </tr>
           </thead>
           <tbody>
-            {sale.length > 0 ? (
+            {[].length > 0 ? (
               <>
-                {sale.map((s) => (
+                {[].map((s) => (
                   <tr
                     key={s.id}
                     className={`hover:bg-blue-400 cursor-pointer ${
-                      selection.state && selection.id === s.id
+                      {}.state && {}.id === s.id
                         ? "bg-blue-600"
                         : "bg-transparent"
                     }`}
-                    onClick={() => selectRow(s)}
+                    onClick={console.log("Seleccionando fila...")}
                   >
                     <td className="capitalize">{s.barcode}</td>
                     <td className="capitalize">{s.name}</td>
                     <td
                       className="text-center"
-                      onClick={() => (!s.edit ? setEditItem(s.barcode) : null)}
+                      onClick={() => console.log("Seleccionando input...")}
                       // onKeyDown={(e) =>
                       //   !s.edit && e.key === "Enter"
                       //     ? setEditItem(s.barcode)
@@ -131,11 +102,17 @@ function Sales() {
                         type="number"
                         value={s.quantity}
                         readOnly={!s.edit}
-                        onChange={(e) => itemSaleFactory(e, s.barcode)}
-                        onKeyDown={(e) =>
-                          e.key === "Enter" && s.edit ? editQuantity() : null
+                        onChange={(e) =>
+                          console.log("cambiando input: ", e.target.name)
                         }
-                        onBlur={() => (s.edit ? editQuantity() : null)}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && s.edit
+                            ? console.log("Presionando Enter...")
+                            : null
+                        }
+                        onBlur={() =>
+                          s.edit ? console.log("Perdiendo el focus...") : null
+                        }
                       />
                     </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
@@ -152,13 +129,13 @@ function Sales() {
         <div className="col-span-2 grid grid-rows-2 grid-cols-3">
           <button
             className="bg-blue-300 hover:bg-blue-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
-            onClick={clearSale}
+            onClick={() => console.log("Limpiando ventas...")}
           >
             LIMPIAR
           </button>
           <button
             className="bg-red-300 hover:bg-red-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
-            onClick={deleteItem}
+            onClick={() => console.log("Eliminando item...")}
           >
             ELIMINAR ITEM
           </button>
@@ -182,7 +159,7 @@ function Sales() {
             name="price"
             autoComplete="off"
             readOnly
-            value={formatCurrency(saleTotal)}
+            value={formatCurrency(9000)}
           />
         </div>
       </div>
