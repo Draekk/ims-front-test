@@ -2,7 +2,7 @@ import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
 
 function Sales() {
-  const { getItemByBarcode, saleProduct } = useSales();
+  const { getItemByBarcode, saleDetails } = useSales();
 
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
@@ -76,11 +76,11 @@ function Sales() {
             </tr>
           </thead>
           <tbody>
-            {[].length > 0 ? (
+            {saleDetails.length > 0 ? (
               <>
-                {[].map((s) => (
+                {saleDetails.map((s) => (
                   <tr
-                    key={s.id}
+                    key={s.product.id}
                     className={`hover:bg-blue-400 cursor-pointer ${
                       {}.state && {}.id === s.id
                         ? "bg-blue-600"
@@ -88,8 +88,8 @@ function Sales() {
                     }`}
                     onClick={console.log("Seleccionando fila...")}
                   >
-                    <td className="capitalize">{s.barcode}</td>
-                    <td className="capitalize">{s.name}</td>
+                    <td>{s.product.barcode}</td>
+                    <td className="capitalize">{s.product.name}</td>
                     <td
                       className="text-center"
                       onClick={() => console.log("Seleccionando input...")}
@@ -104,7 +104,6 @@ function Sales() {
                         name="quantity"
                         type="number"
                         value={s.quantity}
-                        readOnly={!s.edit}
                         onChange={(e) =>
                           console.log("cambiando input: ", e.target.name)
                         }
@@ -112,9 +111,6 @@ function Sales() {
                           e.key === "Enter" && s.edit
                             ? console.log("Presionando Enter...")
                             : null
-                        }
-                        onBlur={() =>
-                          s.edit ? console.log("Perdiendo el focus...") : null
                         }
                       />
                     </td>
