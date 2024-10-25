@@ -17,8 +17,10 @@ function useSales() {
   };
 
   //States
+  const [formInput, setFormInput] = useState({ barcode: "", name: "" });
   const [saleProduct, setSaleProduct] = useState(initialSaleProduct);
   const [saleDetails, setSaleDetails] = useState([]);
+  const [matchingProducts, setMatchingProducts] = useState([]);
 
   function getItemByBarcode(e) {
     let { value } = e.target;
@@ -33,6 +35,16 @@ function useSales() {
     } else {
       console.error("Error");
     }
+  }
+
+  function getItemsByName(e) {
+    const { value } = e.target;
+    if (value.length > 1) {
+      const updatedMatch = products.filter((p) =>
+        p.name.includes(value.trim().toLowerCase())
+      );
+      setMatchingProducts(updatedMatch);
+    } else setMatchingProducts([]);
   }
 
   useEffect(() => {
@@ -51,6 +63,15 @@ function useSales() {
     setSaleProduct(initialSaleProduct);
   }
 
+  function selectProduct(item) {
+    setSaleProduct({
+      product: { ...item },
+      quantity: 1,
+      total: item.salePrice,
+    });
+    setMatchingProducts([]);
+  }
+
   function updateTotalPerItem(index, quantity) {
     const updatedDetails = [...saleDetails];
     const item = updatedDetails[index];
@@ -59,7 +80,15 @@ function useSales() {
     setSaleDetails(updatedDetails);
   }
 
-  return { getItemByBarcode, saleProduct, saleDetails };
+  return {
+    formInput,
+    getItemByBarcode,
+    getItemsByName,
+    saleProduct,
+    saleDetails,
+    matchingProducts,
+    selectProduct,
+  };
 }
 
 export default useSales;

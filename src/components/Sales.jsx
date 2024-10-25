@@ -2,7 +2,14 @@ import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
 
 function Sales() {
-  const { getItemByBarcode, saleDetails } = useSales();
+  const {
+    formInput,
+    getItemByBarcode,
+    getItemsByName,
+    saleDetails,
+    matchingProducts,
+    selectProduct,
+  } = useSales();
 
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
@@ -23,6 +30,8 @@ function Sales() {
             id="barcode"
             name="barcode"
             autoComplete="off"
+            value={formInput.barcode}
+            onChange={(e) => console.log("cambiando el valor")}
             onBlur={(e) => getItemByBarcode(e)}
           />
         </div>
@@ -39,24 +48,22 @@ function Sales() {
             id="name"
             name="name"
             autoComplete="off"
+            onChange={(e) => getItemsByName(e)}
           />
-          {false ? (
+          {matchingProducts.length > 0 ? (
             <div className="w-full bg-white absolute z-20 shadow-md shadow-gray-500">
               <table className="w-full">
                 <tbody>
-                  {[].map(
-                    (
-                      p //todo:
-                    ) => (
-                      <tr
-                        key={p.id}
-                        className="hover:bg-blue-400 cursor-pointer"
-                      >
-                        <td>{p.name}</td>
-                        <td className="w-32">{formatCurrency(p.price)}</td>
-                      </tr>
-                    )
-                  )}
+                  {matchingProducts.map((p) => (
+                    <tr
+                      key={p.id}
+                      className="hover:bg-blue-400 cursor-pointer"
+                      onClick={() => selectProduct(p)}
+                    >
+                      <td>{p.name}</td>
+                      <td className="w-32">{formatCurrency(p.salePrice)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
