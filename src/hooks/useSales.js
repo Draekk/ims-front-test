@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import useProducts from "./useProducts";
 
 function useSales() {
-  const { products, product } = useProducts();
+  const { products } = useProducts();
   const initialSaleProduct = {
     product: {
       id: 0,
@@ -16,15 +16,59 @@ function useSales() {
     total: 0,
   };
 
+  function initialSaleDetails() {
+    const localStorageDetail = localStorage.getItem("detail");
+    return localStorageDetail ? JSON.parse(localStorageDetail) : [];
+  }
+
   //States
-  const [formInput, setFormInput] = useState({ barcode: "", name: "" });
+
+  const [formInput, setFormInput] = useState({
+    barcode: "",
+    name: "",
+    quantity: 0,
+  });
   const [saleProduct, setSaleProduct] = useState(initialSaleProduct);
-  const [saleDetails, setSaleDetails] = useState([]);
+  const [saleDetails, setSaleDetails] = useState(initialSaleDetails);
+  const [itemSelection, setItemSelection] = useState(initialSaleProduct);
   const [matchingProducts, setMatchingProducts] = useState([]);
 
-  function getItemByBarcode(e) {
-    let { value } = e.target;
-    const item = products.find((p) => p.barcode === value.trim().toLowerCase());
+  //----------------------------------------------------------Exportable functions
+
+  //---------------------------UI interaction
+
+  function formInputFactory(e) {
+    const { name, value } = e.target;
+    const isNumberField = ["quantity"].includes(name);
+    setFormInput({
+      ...formInput,
+      [name]: isNumberField ? +value : value,
+    });
+  }
+
+  function resetDetails() {
+    setSaleDetails([]);
+  }
+
+  function selectProduct(item) {
+    setSaleProduct({
+      product: { ...item },
+      quantity: 1,
+      total: item.salePrice,
+    });
+    setMatchingProducts([]);
+  }
+
+  function selectDetail(item) {
+    setItemSelection(item);
+  }
+
+  //---------------------------Logic
+
+  function getItemByBarcode() {
+    const item = products.find(
+      (p) => p.barcode === formInput.barcode.trim().toLowerCase()
+    );
     if (item) {
       setSaleProduct({
         ...saleProduct,
@@ -37,21 +81,13 @@ function useSales() {
     }
   }
 
-  function getItemsByName(e) {
-    const { value } = e.target;
-    if (value.length > 1) {
-      const updatedMatch = products.filter((p) =>
-        p.name.includes(value.trim().toLowerCase())
-      );
+  function getItemsByName() {
+    const name = formInput.name.trim().toLowerCase();
+    if (name.length > 1) {
+      const updatedMatch = products.filter((p) => p.name.includes(name));
       setMatchingProducts(updatedMatch);
     } else setMatchingProducts([]);
   }
-
-  useEffect(() => {
-    if (saleProduct.product.id !== 0) {
-      addToDetail();
-    }
-  }, [saleProduct]);
 
   function addToDetail() {
     const i = saleDetails.findIndex(
@@ -63,14 +99,18 @@ function useSales() {
     setSaleProduct(initialSaleProduct);
   }
 
-  function selectProduct(item) {
-    setSaleProduct({
-      product: { ...item },
-      quantity: 1,
-      total: item.salePrice,
-    });
-    setMatchingProducts([]);
-  }
+  useEffect(() => {
+    if (saleProduct.product.id !== 0) {
+      addToDetail();
+      resetFormInput();
+    }
+  }, [saleProduct]);
+
+  useEffect(() => {
+    localStorage.setItem("detail", JSON.stringify(saleDetails));
+  }, [addToDetail]);
+
+  //--------------------------------------------------------------Non exportable functions
 
   function updateTotalPerItem(index, quantity) {
     const updatedDetails = [...saleDetails];
@@ -80,8 +120,16 @@ function useSales() {
     setSaleDetails(updatedDetails);
   }
 
+  function resetFormInput() {
+    setFormInput({ barcode: "", name: "", quantity: 0 });
+  }
+
   return {
     formInput,
+    formInputFactory,
+    resetDetails,
+    itemSelection,
+    setItemSelection,
     getItemByBarcode,
     getItemsByName,
     saleProduct,

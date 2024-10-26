@@ -4,6 +4,10 @@ import useSales from "../hooks/useSales";
 function Sales() {
   const {
     formInput,
+    formInputFactory,
+    resetDetails,
+    itemSelection,
+    setItemSelection,
     getItemByBarcode,
     getItemsByName,
     saleDetails,
@@ -31,8 +35,9 @@ function Sales() {
             name="barcode"
             autoComplete="off"
             value={formInput.barcode}
-            onChange={(e) => console.log("cambiando el valor")}
-            onBlur={(e) => getItemByBarcode(e)}
+            onChange={(e) => formInputFactory(e)}
+            onBlur={getItemByBarcode}
+            onKeyDown={(e) => (e.key === "Enter" ? getItemByBarcode() : null)}
           />
         </div>
         <div className="relative w-full md:w-[63%]">
@@ -48,7 +53,11 @@ function Sales() {
             id="name"
             name="name"
             autoComplete="off"
-            onChange={(e) => getItemsByName(e)}
+            value={formInput.name}
+            onChange={(e) => {
+              formInputFactory(e);
+              getItemsByName();
+            }}
           />
           {matchingProducts.length > 0 ? (
             <div className="w-full bg-white absolute z-20 shadow-md shadow-gray-500">
@@ -85,15 +94,15 @@ function Sales() {
           <tbody>
             {saleDetails.length > 0 ? (
               <>
-                {saleDetails.map((s) => (
+                {saleDetails.map((s, i) => (
                   <tr
                     key={s.product.id}
                     className={`hover:bg-blue-400 cursor-pointer ${
-                      {}.state && {}.id === s.id
+                      itemSelection.product.id > 0
                         ? "bg-blue-600"
                         : "bg-transparent"
                     }`}
-                    onClick={console.log("Seleccionando fila...")}
+                    onClick={() => setItemSelection(s)}
                   >
                     <td>{s.product.barcode}</td>
                     <td className="capitalize">{s.product.name}</td>
@@ -135,7 +144,7 @@ function Sales() {
         <div className="col-span-2 grid grid-rows-2 grid-cols-3">
           <button
             className="bg-blue-300 hover:bg-blue-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
-            onClick={() => console.log("Limpiando ventas...")}
+            onClick={resetDetails}
           >
             LIMPIAR
           </button>
