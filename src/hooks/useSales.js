@@ -30,7 +30,10 @@ function useSales() {
   });
   const [saleProduct, setSaleProduct] = useState(initialSaleProduct);
   const [saleDetails, setSaleDetails] = useState(initialSaleDetails);
-  const [itemSelection, setItemSelection] = useState(initialSaleProduct);
+  const [itemSelection, setItemSelection] = useState({
+    ...initialSaleProduct,
+    edit: false,
+  });
   const [matchingProducts, setMatchingProducts] = useState([]);
 
   //----------------------------------------------------------Exportable functions
@@ -60,7 +63,14 @@ function useSales() {
   }
 
   function selectDetail(item) {
-    setItemSelection(item);
+    setItemSelection({ ...item, edit: false });
+  }
+
+  function resetSelectDetail() {
+    setItemSelection({
+      ...initialSaleProduct,
+      edit: false,
+    });
   }
 
   //---------------------------Logic

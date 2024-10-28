@@ -98,36 +98,27 @@ function Sales() {
                   <tr
                     key={s.product.id}
                     className={`hover:bg-blue-400 cursor-pointer ${
-                      itemSelection.product.id > 0
-                        ? "bg-blue-600"
+                      itemSelection.product.id === s.product.id
+                        ? "bg-blue-500"
                         : "bg-transparent"
                     }`}
-                    onClick={() => setItemSelection(s)}
                   >
                     <td>{s.product.barcode}</td>
                     <td className="capitalize">{s.product.name}</td>
-                    <td
-                      className="text-center"
-                      onClick={() => console.log("Seleccionando input...")}
-                      // onKeyDown={(e) =>
-                      //   !s.edit && e.key === "Enter"
-                      //     ? setEditItem(s.barcode)
-                      //     : null
-                      // }
-                    >
+                    <td className="text-center">
                       <input
-                        className="w-full text-center bg-transparent disabled:outline-none"
+                        className="w-full text-center bg-transparent disabled:outline-none placeholder:text-black"
                         name="quantity"
                         type="number"
-                        value={s.quantity}
-                        onChange={(e) =>
-                          console.log("cambiando input: ", e.target.name)
-                        }
+                        disabled={itemSelection.product.id !== s.product.id}
+                        placeholder={s.quantity}
+                        onChange={(e) => formInputFactory(e)}
                         onKeyDown={(e) =>
                           e.key === "Enter" && s.edit
                             ? console.log("Presionando Enter...")
                             : null
                         }
+                        onDoubleClick={() => setItemSelection(s)}
                       />
                     </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
