@@ -109,6 +109,14 @@ function useSales() {
     setSaleProduct(initialSaleProduct);
   }
 
+  function setNewDetailQuantity() {
+    setSaleProduct({
+      product: itemSelection.product,
+      quantity: formInput.quantity - itemSelection.quantity,
+      total: itemSelection.product.salePrice,
+    });
+  }
+
   useEffect(() => {
     if (saleProduct.product.id !== 0) {
       addToDetail();
@@ -143,6 +151,7 @@ function useSales() {
     getItemByBarcode,
     getItemsByName,
     saleProduct,
+    setNewDetailQuantity,
     saleDetails,
     matchingProducts,
     selectProduct,

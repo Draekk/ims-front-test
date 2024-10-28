@@ -10,10 +10,15 @@ function Sales() {
     setItemSelection,
     getItemByBarcode,
     getItemsByName,
+    setNewDetailQuantity,
     saleDetails,
     matchingProducts,
     selectProduct,
   } = useSales();
+
+  function selectItem(item) {
+    setItemSelection({ ...item });
+  }
 
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
@@ -102,23 +107,30 @@ function Sales() {
                         ? "bg-blue-500"
                         : "bg-transparent"
                     }`}
+                    onClick={() => setItemSelection(s)}
+                    // onClick={() => setItemSelection(s)}
                   >
                     <td>{s.product.barcode}</td>
                     <td className="capitalize">{s.product.name}</td>
                     <td className="text-center">
                       <input
-                        className="w-full text-center bg-transparent disabled:outline-none placeholder:text-black"
+                        className="text-center bg-transparent disabled:outline-none placeholder:text-black"
                         name="quantity"
                         type="number"
-                        disabled={itemSelection.product.id !== s.product.id}
+                        readOnly={itemSelection.product.id !== s.product.id}
                         placeholder={s.quantity}
                         onChange={(e) => formInputFactory(e)}
                         onKeyDown={(e) =>
-                          e.key === "Enter" && s.edit
-                            ? console.log("Presionando Enter...")
+                          e.key === "Enter" &&
+                          itemSelection.product.id === s.product.id
+                            ? setNewDetailQuantity()
                             : null
                         }
-                        onDoubleClick={() => setItemSelection(s)}
+                        onBlur={() =>
+                          itemSelection.product.id === s.product.id
+                            ? setNewDetailQuantity()
+                            : null
+                        }
                       />
                     </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
