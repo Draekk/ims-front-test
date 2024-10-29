@@ -1,5 +1,7 @@
+import { useState } from "react";
 import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
+import CustomModal from "./CustomModal";
 
 function Sales() {
   const {
@@ -14,14 +16,27 @@ function Sales() {
     saleDetails,
     matchingProducts,
     selectProduct,
+    saleTotal,
+    deleteItem,
+    createSale,
   } = useSales();
 
-  function selectItem(item) {
-    setItemSelection({ ...item });
-  }
+  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
 
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
+      {deleteConfirmationModal ? (
+        <CustomModal
+          title={"Confirmación"}
+          description={"¿Desea realizar la venta?"}
+          noButtonText={"NO"}
+          yesButtonText={"SI"}
+          yesFunction={createSale}
+          setToggleModal={setDeleteConfirmationModal}
+        ></CustomModal>
+      ) : (
+        <></>
+      )}
       <form
         onSubmit={(e) => e.preventDefault()}
         className="md:flex md:flex-row flex-col md:justify-between w-full text-2xl"
@@ -108,29 +123,28 @@ function Sales() {
                         : "bg-transparent"
                     }`}
                     onClick={() => setItemSelection(s)}
-                    // onClick={() => setItemSelection(s)}
                   >
                     <td>{s.product.barcode}</td>
                     <td className="capitalize">{s.product.name}</td>
-                    <td className="text-center">
+                    <td className="text-center w-44">
                       <input
-                        className="text-center bg-transparent disabled:outline-none placeholder:text-black"
+                        className="text-center w-44 bg-transparent read-only:outline-none outline-none placeholder:text-black"
                         name="quantity"
                         type="number"
                         readOnly={itemSelection.product.id !== s.product.id}
                         placeholder={s.quantity}
-                        onChange={(e) => formInputFactory(e)}
                         onKeyDown={(e) =>
                           e.key === "Enter" &&
                           itemSelection.product.id === s.product.id
-                            ? setNewDetailQuantity()
+                            ? setNewDetailQuantity(e)
                             : null
                         }
-                        onBlur={() =>
+                        onBlur={(e) =>
                           itemSelection.product.id === s.product.id
-                            ? setNewDetailQuantity()
+                            ? setNewDetailQuantity(e)
                             : null
                         }
+                        onFocus={(e) => (e.target.value = "")}
                       />
                     </td>
                     <td className="text-center">{formatCurrency(s.total)}</td>
@@ -144,24 +158,25 @@ function Sales() {
         </table>
       </div>
       <div className="grid grid-cols-3 w-full">
-        <div className="col-span-2 grid grid-rows-2 grid-cols-3">
+        <div className="col-span-2 grid grid-cols-3 gap-5">
           <button
-            className="bg-blue-300 hover:bg-blue-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-blue-300 hover:bg-blue-200 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={resetDetails}
           >
             LIMPIAR
           </button>
           <button
-            className="bg-red-300 hover:bg-red-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
-            onClick={() => console.log("Eliminando item...")}
+            className="bg-red-300 hover:bg-red-200 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            onClick={deleteItem}
           >
             ELIMINAR ITEM
           </button>
-          <button className="row-span-2 bg-green-300 hover:bg-green-200 rounded-md mx-auto w-[70%] font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner">
-            button
+          <button
+            className="bg-green-300 hover:bg-green-200 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            onClick={() => setDeleteConfirmationModal(true)}
+          >
+            EJECUTAR VENTA
           </button>
-          <button>button</button>
-          <button>button</button>
         </div>
         <div className="relative">
           <label
@@ -177,7 +192,7 @@ function Sales() {
             name="price"
             autoComplete="off"
             readOnly
-            value={formatCurrency(9000)}
+            value={formatCurrency(saleTotal)}
           />
         </div>
       </div>

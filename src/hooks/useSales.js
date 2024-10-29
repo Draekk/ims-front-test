@@ -26,13 +26,11 @@ function useSales() {
   const [formInput, setFormInput] = useState({
     barcode: "",
     name: "",
-    quantity: 0,
   });
   const [saleProduct, setSaleProduct] = useState(initialSaleProduct);
   const [saleDetails, setSaleDetails] = useState(initialSaleDetails);
   const [itemSelection, setItemSelection] = useState({
     ...initialSaleProduct,
-    edit: false,
   });
   const [matchingProducts, setMatchingProducts] = useState([]);
 
@@ -42,10 +40,9 @@ function useSales() {
 
   function formInputFactory(e) {
     const { name, value } = e.target;
-    const isNumberField = ["quantity"].includes(name);
     setFormInput({
       ...formInput,
-      [name]: isNumberField ? +value : value,
+      [name]: value,
     });
   }
 
@@ -62,32 +59,36 @@ function useSales() {
     setMatchingProducts([]);
   }
 
-  function selectDetail(item) {
-    setItemSelection({ ...item, edit: false });
-  }
-
   function resetSelectDetail() {
     setItemSelection({
       ...initialSaleProduct,
-      edit: false,
     });
+  }
+
+  function deleteItem() {
+    const updatedDetail = saleDetails.filter(
+      (p) => p.product.id !== itemSelection.product.id
+    );
+    setSaleDetails(updatedDetail);
   }
 
   //---------------------------Logic
 
   function getItemByBarcode() {
-    const item = products.find(
-      (p) => p.barcode === formInput.barcode.trim().toLowerCase()
-    );
-    if (item) {
-      setSaleProduct({
-        ...saleProduct,
-        product: { ...item },
-        quantity: 1,
-        total: item.salePrice,
-      });
-    } else {
-      console.error("Error");
+    if (formInput.barcode !== "") {
+      const item = products.find(
+        (p) => p.barcode === formInput.barcode.trim().toLowerCase()
+      );
+      if (item) {
+        setSaleProduct({
+          ...saleProduct,
+          product: { ...item },
+          quantity: 1,
+          total: item.salePrice,
+        });
+      } else {
+        console.error("Error");
+      }
     }
   }
 
@@ -109,12 +110,18 @@ function useSales() {
     setSaleProduct(initialSaleProduct);
   }
 
-  function setNewDetailQuantity() {
-    setSaleProduct({
-      product: itemSelection.product,
-      quantity: formInput.quantity - itemSelection.quantity,
-      total: itemSelection.product.salePrice,
-    });
+  function setNewDetailQuantity(e) {
+    let { value } = e.target;
+    if (value !== "" && +value > 0) {
+      setSaleProduct({
+        product: itemSelection.product,
+        quantity: +value - itemSelection.quantity,
+        total: itemSelection.product.salePrice,
+      });
+    } else {
+      e.target.value = "";
+    }
+    resetSelectDetail();
   }
 
   useEffect(() => {
@@ -127,6 +134,36 @@ function useSales() {
   useEffect(() => {
     localStorage.setItem("detail", JSON.stringify(saleDetails));
   }, [addToDetail]);
+
+  const saleTotal = useMemo(
+    () => saleDetails.reduce((t, i) => (t += i.total), 0),
+    [saleDetails]
+  );
+
+  async function createSale() {
+    const sale = {
+      products: saleDetails.map((p) => {
+        return {
+          id: p.product.id,
+          quantity: p.quantity,
+        };
+      }),
+      isCash: false,
+    };
+
+    const res = await fetch("/api/sale/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(sale),
+    });
+
+    const data = await res.json();
+
+    console.log(data);
+    resetDetails();
+  }
 
   //--------------------------------------------------------------Non exportable functions
 
@@ -148,6 +185,7 @@ function useSales() {
     resetDetails,
     itemSelection,
     setItemSelection,
+    resetSelectDetail,
     getItemByBarcode,
     getItemsByName,
     saleProduct,
@@ -155,6 +193,9 @@ function useSales() {
     saleDetails,
     matchingProducts,
     selectProduct,
+    saleTotal,
+    deleteItem,
+    createSale,
   };
 }
 
