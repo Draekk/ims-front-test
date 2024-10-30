@@ -2,6 +2,8 @@ import { useState } from "react";
 import formatCurrency from "../helpers/formatCurrency";
 import useSales from "../hooks/useSales";
 import CustomModal from "./CustomModal";
+import useAlertUI from "../hooks/useAlertUI";
+import Alert from "./Alert";
 
 function Sales() {
   const {
@@ -21,7 +23,17 @@ function Sales() {
     createSale,
   } = useSales();
 
+  const { activeAlert, setActiveAlert, alertData, setAlertData } = useAlertUI();
+
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+
+  async function saveWithMsg() {
+    const data = await createSale();
+    data.success
+      ? setAlertData({ error: false, message: data.message })
+      : setAlertData({ error: true, message: data.error.cause });
+    setActiveAlert(true);
+  }
 
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
@@ -31,7 +43,7 @@ function Sales() {
           description={"¿Desea realizar la venta?"}
           noButtonText={"NO"}
           yesButtonText={"SI"}
-          yesFunction={createSale}
+          yesFunction={saveWithMsg}
           setToggleModal={setDeleteConfirmationModal}
         ></CustomModal>
       ) : (
@@ -196,6 +208,15 @@ function Sales() {
           />
         </div>
       </div>
+      {activeAlert ? (
+        <Alert
+          textMessage={alertData.message}
+          activeAlert={activeAlert}
+          error={alertData.error}
+        ></Alert>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

@@ -70,6 +70,7 @@ function useSales() {
       (p) => p.product.id !== itemSelection.product.id
     );
     setSaleDetails(updatedDetail);
+    resetSelectDetail();
   }
 
   //---------------------------Logic
@@ -163,6 +164,7 @@ function useSales() {
 
     console.log(data);
     resetDetails();
+    return data;
   }
 
   //--------------------------------------------------------------Non exportable functions
