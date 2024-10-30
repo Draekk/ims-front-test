@@ -33,6 +33,7 @@ function useSales() {
     ...initialSaleProduct,
   });
   const [matchingProducts, setMatchingProducts] = useState([]);
+  const [isCash, setIsCash] = useState(true);
 
   //----------------------------------------------------------Exportable functions
 
@@ -48,6 +49,7 @@ function useSales() {
 
   function resetDetails() {
     setSaleDetails([]);
+    resetSelectDetail();
   }
 
   function selectProduct(item) {
@@ -71,6 +73,10 @@ function useSales() {
     );
     setSaleDetails(updatedDetail);
     resetSelectDetail();
+  }
+
+  function toggleIsCash() {
+    setIsCash(!isCash);
   }
 
   //---------------------------Logic
@@ -149,7 +155,7 @@ function useSales() {
           quantity: p.quantity,
         };
       }),
-      isCash: false,
+      isCash,
     };
 
     const res = await fetch("/api/sale/create", {
@@ -164,6 +170,7 @@ function useSales() {
 
     console.log(data);
     resetDetails();
+    setIsCash(true);
     return data;
   }
 
@@ -198,6 +205,8 @@ function useSales() {
     saleTotal,
     deleteItem,
     createSale,
+    isCash,
+    toggleIsCash,
   };
 }
 

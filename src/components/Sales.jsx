@@ -21,6 +21,8 @@ function Sales() {
     saleTotal,
     deleteItem,
     createSale,
+    isCash,
+    toggleIsCash,
   } = useSales();
 
   const { activeAlert, setActiveAlert, alertData, setAlertData } = useAlertUI();
@@ -113,7 +115,7 @@ function Sales() {
           )}
         </div>
       </form>
-      <div className="w-full h-full m-2 bg-gray-300 rounded-md overflow-scroll">
+      <div className="w-full h-full m-2 bg-gray-300 shadow-inner shadow-gray-400 rounded-md overflow-scroll">
         <table className="w-full text-xl">
           <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
             <tr>
@@ -169,36 +171,45 @@ function Sales() {
           </tbody>
         </table>
       </div>
+      <div className="self-end border-none py-1 px-3 rounded-lg bg-gray-300 shadow-inner shadow-gray-400">
+        <label className="text-lg" htmlFor="isCash">
+          Efectivo:
+        </label>
+        <input
+          className="scale-150 mx-3"
+          type="checkbox"
+          id="isCash"
+          checked={isCash}
+          onChange={toggleIsCash}
+        />
+      </div>
       <div className="grid grid-cols-3 w-full">
         <div className="col-span-2 grid grid-cols-3 gap-5">
           <button
-            className="bg-blue-300 hover:bg-blue-200 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-blue-300 hover:bg-blue-200 disabled:bg-slate-300 disabled:text-slate-400 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={resetDetails}
+            disabled={saleDetails.length === 0}
           >
             LIMPIAR
           </button>
           <button
-            className="bg-red-300 hover:bg-red-200 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-red-300 hover:bg-red-200 disabled:bg-slate-300 disabled:text-slate-400 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={deleteItem}
+            disabled={itemSelection.product.id === 0}
           >
             ELIMINAR ITEM
           </button>
           <button
-            className="bg-green-300 hover:bg-green-200 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-green-300 hover:bg-green-200 disabled:bg-slate-300 disabled:text-slate-400 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={() => setDeleteConfirmationModal(true)}
+            disabled={activeAlert || saleDetails.length === 0}
           >
             EJECUTAR VENTA
           </button>
         </div>
         <div className="relative">
-          <label
-            className="absolute text-black underline right-1"
-            htmlFor="price"
-          >
-            Total Venta:
-          </label>
           <input
-            className="pl-1 pt-6 rounded-lg w-full focus:outline-none bg-transparent text-6xl text-right font-semibold"
+            className="px-1 cursor-default rounded-lg w-full focus:outline-none bg-transparent  text-6xl text-right font-semibold"
             type="text"
             id="price"
             name="price"
