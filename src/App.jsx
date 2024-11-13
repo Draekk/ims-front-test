@@ -4,6 +4,7 @@ import ProductManager from "./components/ProductManager";
 import Sales from "./components/Sales";
 import useHeaderButtons from "./hooks/useHeaderButtons";
 import useProducts from "./hooks/useProducts";
+import SaleLog from "./components/SaleLog";
 
 function App() {
   const {
@@ -70,6 +71,8 @@ function App() {
       )}
 
       {switches.s2 ? <Sales></Sales> : <></>}
+
+      {switches.s3 ? <SaleLog></SaleLog> : <></>}
     </div>
   );
 }

@@ -169,8 +169,11 @@ function useSales() {
     const data = await res.json();
 
     console.log(data);
-    resetDetails();
-    setIsCash(true);
+
+    if (data.success) {
+      resetDetails();
+      setIsCash(true);
+    }
     return data;
   }
 
