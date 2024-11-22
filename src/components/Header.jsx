@@ -5,11 +5,7 @@ function Header({ switches, toggleSwitches }) {
     <header className="md:h-36 h-28 flex md:items-end items-center justify-center  bg-blue-50 shadow-lg">
       <div className="flex md:items-end items-center md:mx-auto pb-1">
         <picture className="md:max-w-32 max-w-16 rounded-xl overflow-hidden">
-          <img
-            src="/public/img/comercial-mix-log.png"
-            alt=""
-            className="w-full"
-          />
+          <img src="/img/comercial-mix-log.png" alt="" className="w-full" />
         </picture>
         <h1 className="uppercase font-black text-4xl px-5">Comercial Mix</h1>
       </div>

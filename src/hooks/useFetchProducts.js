@@ -35,7 +35,7 @@
  * }
  */
 function useFetchProducts() {
-  const API = "/api/product";
+  const API = "http://localhost:3000/api/product";
 
   /**
    * Obtiene la lista de productos desde la API.

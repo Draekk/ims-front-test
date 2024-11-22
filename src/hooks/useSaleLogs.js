@@ -45,6 +45,8 @@ function useSaleLogs() {
   const [searchModal, setSearchModal] = useState(false);
   const [dateRange, setDateRange] = useState(defaultDate);
 
+  const API = "http://localhost:3000/api/sale";
+
   //--------------------------UI FUNCTIONS
 
   /**
@@ -105,7 +107,7 @@ function useSaleLogs() {
    */
   async function getSales() {
     try {
-      const res = await fetch("/api/sale/find/all/1");
+      const res = await fetch(`${API}/find/all/1`);
       const data = await res.json();
 
       setAllSales(data.data);

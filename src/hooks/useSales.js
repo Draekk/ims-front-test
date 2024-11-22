@@ -38,6 +38,7 @@ import useProducts from "./useProducts";
  * toggleIsCash();
  */
 function useSales() {
+  const API = "http://localhost:3000/api/sale";
   const { products } = useProducts();
   const initialSaleProduct = {
     product: {
@@ -244,7 +245,7 @@ function useSales() {
       isCash,
     };
 
-    const res = await fetch("/api/sale/create", {
+    const res = await fetch(`${API}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
