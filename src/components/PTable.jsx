@@ -38,7 +38,7 @@ function PTable({
   }
 
   return (
-    <div className="bg-gray-300 mx-auto w-fit rounded-md overflow-scroll h-[70vh] shadow-lg text-xl">
+    <div className="bg-gray-300 md:w-[1200px] mx-auto w-fit rounded-md overflow-scroll h-[70vh] shadow-lg text-xl">
       {deleteConfirmationModal ? (
         <CustomModal
           title={"aviso"}
@@ -51,7 +51,7 @@ function PTable({
       ) : (
         <></>
       )}
-      <table className="md:w-[90vw] w-full">
+      <table className="w-full">
         <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
           <tr>
             <th>Código</th>

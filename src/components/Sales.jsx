@@ -37,6 +37,11 @@ function Sales() {
     setActiveAlert(true);
   }
 
+  function setQuantityValue(e) {
+    setNewDetailQuantity(e);
+    e.target.value = "";
+  }
+
   return (
     <div className="md:max-w-[1200px] md:mx-auto w-full md:mt-3 bg-slate-200 h-[80%] p-2 flex flex-col justify-between items-center rounded-md">
       {deleteConfirmationModal ? (
@@ -150,7 +155,7 @@ function Sales() {
                         onKeyDown={(e) =>
                           e.key === "Enter" &&
                           itemSelection.product.id === s.product.id
-                            ? setNewDetailQuantity(e)
+                            ? setQuantityValue(e)
                             : null
                         }
                         onBlur={(e) =>
