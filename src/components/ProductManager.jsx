@@ -167,7 +167,7 @@ function ProductManager({
           />
         </div>
         <button
-          className="col-end-4 row-end-6 cursor-pointer bg-blue-500 disabled:bg-slate-500 hover:bg-blue-400 py-2 mx-5 rounded-md font-black text-white"
+          className="col-end-4 row-end-6 cursor-pointer bg-blue-500 disabled:bg-slate-500 disabled:cursor-not-allowed hover:bg-blue-400 py-2 mx-5 rounded-md font-black text-white"
           onClick={saveWithMsg}
           disabled={activeAlert}
           type="button"

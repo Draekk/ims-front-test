@@ -52,15 +52,15 @@ function PTable({
         <></>
       )}
       <table className="w-full">
-        <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
+        <thead className="sticky top-0 bg-slate-900 text-white uppercase shadow-md">
           <tr>
-            <th>Código</th>
+            <th className="w-56">Código</th>
             <th>Nombre</th>
             <th
               id="stock"
               title="Ordenar"
               onClick={(e) => sortProducts(e, order)}
-              className="cursor-pointer hover:bg-gray-700"
+              className="cursor-pointer hover:bg-gray-700 w-44"
             >
               Stock
             </th>
@@ -68,7 +68,7 @@ function PTable({
               id="costPrice"
               title="Ordenar"
               onClick={(e) => sortProducts(e, order)}
-              className="cursor-pointer hover:bg-gray-700"
+              className="cursor-pointer hover:bg-gray-700 w-44"
             >
               Precio Costo
             </th>
@@ -77,11 +77,11 @@ function PTable({
               id="salePrice"
               title="Ordenar"
               onClick={(e) => sortProducts(e, order)}
-              className="cursor-pointer hover:bg-gray-700"
+              className="cursor-pointer hover:bg-gray-700 w-44"
             >
               Precio Venta
             </th>
-            <th>acción</th>
+            <th className="w-24">acción</th>
           </tr>
         </thead>
         <tbody>

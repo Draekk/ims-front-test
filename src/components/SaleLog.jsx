@@ -78,14 +78,14 @@ function SaleLog() {
         </div>
       )}
       <div className="w-full h-full m-2 bg-gray-300 shadow-inner shadow-gray-400 rounded-md overflow-scroll">
-        <table className="w-full">
-          <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
+        <table className="w-full text-xl">
+          <thead className="sticky top-0 bg-slate-900 text-white uppercase shadow-md">
             <tr>
-              <th>N° VENTA</th>
-              <th>ITEMS</th>
-              <th>TOTAL</th>
-              <th>METODO</th>
-              <th>FECHA</th>
+              <th className="w-60">N° VENTA</th>
+              <th className="w-60">ITEMS</th>
+              <th className="w-60">TOTAL</th>
+              <th className="w-60">METODO</th>
+              <th className="w-60">FECHA</th>
             </tr>
           </thead>
           <tbody>
@@ -96,7 +96,7 @@ function SaleLog() {
                     <td className="min-w-12 pl-1">{s.id}</td>
                     <td>
                       <select
-                        className="w-full bg-transparent"
+                        className="w-full bg-transparent shadow-inner shadow-gray-500"
                         name="items"
                         id="items"
                         defaultValue="default"

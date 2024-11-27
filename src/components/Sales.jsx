@@ -122,7 +122,7 @@ function Sales() {
       </form>
       <div className="w-full h-full m-2 bg-gray-300 shadow-inner shadow-gray-400 rounded-md overflow-scroll">
         <table className="w-full text-xl">
-          <thead className="sticky top-0 bg-black text-white uppercase shadow-md">
+          <thead className="sticky top-0 bg-slate-900 text-white uppercase shadow-md">
             <tr>
               <th className="w-56">CÓDIGO</th>
               <th>NOMBRE</th>
@@ -191,21 +191,21 @@ function Sales() {
       <div className="grid grid-cols-3 w-full">
         <div className="col-span-2 grid grid-cols-3 gap-5">
           <button
-            className="bg-blue-300 hover:bg-blue-200 disabled:bg-slate-300 disabled:text-slate-400 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-blue-300 hover:bg-blue-200 disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={resetDetails}
             disabled={saleDetails.length === 0}
           >
             LIMPIAR
           </button>
           <button
-            className="bg-red-300 hover:bg-red-200 disabled:bg-slate-300 disabled:text-slate-400 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-red-300 hover:bg-red-200 disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={deleteItem}
             disabled={itemSelection.product.id === 0}
           >
             ELIMINAR ITEM
           </button>
           <button
-            className="bg-green-300 hover:bg-green-200 disabled:bg-slate-300 disabled:text-slate-400 rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
+            className="bg-green-300 hover:bg-green-200 disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed rounded-md text-xl mx-auto w-full font-semibold uppercase shadow-[rgba(255,255,255,0.5)] shadow-inner"
             onClick={() => setDeleteConfirmationModal(true)}
             disabled={activeAlert || saleDetails.length === 0}
           >
