@@ -117,6 +117,21 @@ function useSaleLogs() {
     }
   }
 
+  async function deleteSale(id) {
+    try {
+      const res = await fetch(`${API}/delete/id/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        getSales();
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   useEffect(() => {
     getSales();
   }, []);
@@ -129,6 +144,7 @@ function useSaleLogs() {
     dateFactory,
     filterSales,
     resetSales,
+    deleteSale,
   };
 }
 

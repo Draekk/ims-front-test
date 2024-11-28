@@ -11,6 +11,7 @@ function SaleLog() {
     dateFactory,
     filterSales,
     resetSales,
+    deleteSale,
   } = useSaleLogs();
 
   return (
@@ -81,18 +82,19 @@ function SaleLog() {
         <table className="w-full text-xl">
           <thead className="sticky top-0 bg-slate-900 text-white uppercase shadow-md">
             <tr>
-              <th className="w-60">N° VENTA</th>
-              <th className="w-60">ITEMS</th>
-              <th className="w-60">TOTAL</th>
-              <th className="w-60">METODO</th>
-              <th className="w-60">FECHA</th>
+              <th className="w-52">N° VENTA</th>
+              <th className="w-52">ITEMS</th>
+              <th className="w-52">TOTAL</th>
+              <th className="w-52">METODO</th>
+              <th className="w-52">FECHA</th>
+              <th className="w-16">ACCION</th>
             </tr>
           </thead>
           <tbody>
             {sales.length > 0 ? (
               <>
                 {sales.map((s) => (
-                  <tr key={s.id}>
+                  <tr key={s.id} className="hover:bg-blue-400">
                     <td className="min-w-12 pl-1">{s.id}</td>
                     <td>
                       <select
@@ -122,6 +124,14 @@ function SaleLog() {
                     </td>
                     <td className="text-center">
                       {dateFormatter(s.createdAt)}
+                    </td>
+                    <td className="px-2">
+                      <button
+                        className="text-center bg-red-700 hover:bg-red-600 hover:shadow-custom-red font-black text-white w-full rounded-md"
+                        onClick={() => deleteSale(s.id)}
+                      >
+                        X
+                      </button>
                     </td>
                   </tr>
                 ))}
