@@ -91,50 +91,56 @@ function SaleLog() {
             </tr>
           </thead>
           <tbody>
-            {sales.length > 0 ? (
+            {sales ? (
               <>
-                {sales.map((s) => (
-                  <tr key={s.id} className="hover:bg-blue-400">
-                    <td className="min-w-12 pl-1">{s.id}</td>
-                    <td>
-                      <select
-                        className="w-full bg-transparent shadow-inner shadow-gray-500"
-                        name="items"
-                        id="items"
-                        defaultValue="default"
-                      >
-                        <option className="text-center" value="default">
-                          {s.Products.length}
-                        </option>
-                        {s.Products.map((p) => (
-                          <option
-                            key={p.id}
-                            className="capitalize"
-                            value={p.name}
-                            disabled
+                {sales.length > 0 ? (
+                  <>
+                    {sales.map((s) => (
+                      <tr key={s.id} className="hover:bg-blue-400">
+                        <td className="min-w-12 pl-1">{s.id}</td>
+                        <td>
+                          <select
+                            className="w-full bg-transparent shadow-inner shadow-gray-500"
+                            name="items"
+                            id="items"
+                            defaultValue="default"
                           >
-                            {p.name}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="text-center">{s.total}</td>
-                    <td className="text-center">
-                      {s.isCash ? <>Efectivo</> : <>Tarjeta</>}
-                    </td>
-                    <td className="text-center">
-                      {dateFormatter(s.createdAt)}
-                    </td>
-                    <td className="px-2">
-                      <button
-                        className="text-center bg-red-700 hover:bg-red-600 hover:shadow-custom-red font-black text-white w-full rounded-md"
-                        onClick={() => deleteSale(s.id)}
-                      >
-                        X
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                            <option className="text-center" value="default">
+                              {s.Products.length}
+                            </option>
+                            {s.Products.map((p) => (
+                              <option
+                                key={p.id}
+                                className="capitalize"
+                                value={p.name}
+                                disabled
+                              >
+                                {p.name}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="text-center">{s.total}</td>
+                        <td className="text-center">
+                          {s.isCash ? <>Efectivo</> : <>Tarjeta</>}
+                        </td>
+                        <td className="text-center">
+                          {dateFormatter(s.createdAt)}
+                        </td>
+                        <td className="px-2">
+                          <button
+                            className="text-center bg-red-700 hover:bg-red-600 hover:shadow-custom-red font-black text-white w-full rounded-md"
+                            onClick={() => deleteSale(s.id)}
+                          >
+                            X
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                ) : (
+                  <></>
+                )}
               </>
             ) : (
               <></>
